@@ -1,9 +1,9 @@
 import express from 'express'
-import { getData } from '../controllers/getData.mjs';
+import { register } from '../controllers/user.controllers.mjs';
 
 let routes = express.Router();
 
 
-routes.get('/ping',getData);
+routes.post('/register',register);
 
 export default routes;
