@@ -1,0 +1,35 @@
+@import url('https://fonts.googleapis.com/css2?family=Protest+Revolution&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+/* body{
+  font-family: "Protest Revolution", serif;
+  font-weight: 400;
+  font-style: normal;
+} */
+
+/* styles.css */
+h3{
+ line-height: 0.5;
+}
+/* H1 Styles */
+.text-h1 {
+  @apply text-[clamp(1.5rem,calc(1rem+2.5vw),3rem)] text-center font-bold;
+}
+
+/* H2 Styles */
+.text-h2 {
+  @apply text-[clamp(1.25rem,calc(1rem+1.5vw),2.5rem)] font-semibold leading-snug;
+}
+
+/* Body Text */
+.text-body {
+  @apply text-[clamp(1rem,calc(0.875rem+1vw),1.5rem)] font-normal leading-relaxed;
+}
+
+/* Small Text */
+.text-small {
+  @apply text-[clamp(0.875rem,calc(0.75rem+0.5vw),1.25rem)] font-light leading-normal;
+}
