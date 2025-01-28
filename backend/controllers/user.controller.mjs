@@ -1,6 +1,85 @@
+import userModel from "../models/userModel.mjs";
+import bcrypt from 'bcrypt'
+import jwt from 'jsonwebtoken'
 
 
+export const register = async(req,res) => {
+  try {
 
-export const getData = (req,res) => {
-  res.send('pong')
+    let {fullname,email,password,role} = req.body;
+
+    let userExist = await userModel.findOne({email});
+    if(userExist)
+    {
+      return res.status(400).json({
+        message : "User Already registered",
+        success : false
+      })
+    }
+    let hashedPassword = await bcrypt.hash(password,10);
+    let user = await userModel.create({
+      fullname,
+      email,
+      password : hashedPassword,
+      role,
+    })
+    return res.status(200).json({
+      user,
+      success : true
+    })
+    
+  } catch (error) {
+    return res.status(404).json({
+      message : error.message,
+      success : false
+    })
+  }
+}
+
+export const login = async(req,res) => {
+  try {
+    let {email,password} = req.body;
+
+    let userExist = await userModel.findOne({email});
+    if(!userExist)
+    {
+      return res.status(400).json({
+        message : "User not found",
+        success : false
+      })
+    }
+    let is_match = await bcrypt.compare(password,userExist.password);
+    
+    if(!is_match)
+    {
+      return res.status(400).json({
+      message : 'Invalid Credentials!!!',
+      success : false
+      })
+    }
+
+    let token = jwt.sign({
+      id : userExist._id,
+      role : userExist.role
+    },
+    process.env.SECRET,
+    {
+      expiresIn : '1h'
+    }
+  
+  )
+    
+    return res.status(200).json({
+      message : "You are loggedIn",
+      token,
+      success : false
+    })
+    
+    
+  } catch (error) {
+    return res.status(404).json({
+      message : error.message,
+      success : false
+    })
+  }
 }

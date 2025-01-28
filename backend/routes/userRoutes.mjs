@@ -1,10 +1,11 @@
 import express from 'express'
-import { getData } from '../controllers/user.controller.mjs';
+import { login, register } from '../controllers/user.controller.mjs';
 
 let router = express.Router();
 
 
-router.get('/ping',getData)
+router.post('/register',register)
+router.post('/login',login)
 
 
 export default router;
