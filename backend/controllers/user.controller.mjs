@@ -40,15 +40,15 @@ export const login = async(req,res) => {
   try {
     let {email,password} = req.body;
 
-    let userExist = await userModel.findOne({email});
-    if(!userExist)
+    let user = await userModel.findOne({email});
+    if(!user)
     {
       return res.status(400).json({
         message : "User not found",
         success : false
       })
     }
-    let is_match = await bcrypt.compare(password,userExist.password);
+    let is_match = await bcrypt.compare(password,user.password);
     
     if(!is_match)
     {
@@ -59,8 +59,8 @@ export const login = async(req,res) => {
     }
 
     let token = jwt.sign({
-      id : userExist._id,
-      role : userExist.role
+      userId : user._id,
+      role : user.role
     },
     process.env.SECRET,
     {
@@ -68,13 +68,20 @@ export const login = async(req,res) => {
     }
   
   )
-    
-    return res.status(200).json({
-      message : "You are loggedIn",
-      token,
-      success : false
-    })
-    
+  return res
+  .status(200)
+  .cookie("token", token, {
+    maxAge: 1 * 24 * 60 * 60 * 1000,
+    httpOnly: true,
+    sameSite: "strict",
+    secure : false
+  })
+  .json({
+    message: `Welcom back ${user.fullname}`,
+    user,
+    success: true,
+  });
+
     
   } catch (error) {
     return res.status(404).json({
