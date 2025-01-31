@@ -24,7 +24,7 @@ export const register = async(req,res) => {
       role,
     })
     return res.status(200).json({
-      user,
+      message : "User Created Successfully!!!",
       success : true
     })
     

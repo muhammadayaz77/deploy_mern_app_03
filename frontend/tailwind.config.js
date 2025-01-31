@@ -4,6 +4,19 @@ export default {
     content: ["./index.html", "./src/**/*.{ts,tsx,js,jsx}"],
   theme: {
   	extend: {
+			screens : {
+				'xs': '480px',  // Extra small screens (Custom)
+        'sm': '640px',  // Default small
+        'md': '768px',  // Default medium
+        'custom': '900px', // Another custom breakpoint
+        'lg': '1024px', // Default large
+        'xl': '1280px', // Default extra large
+        '2xl': '1536px', // Default 2xl
+        '3xl': '1736px', // Default 2xl
+        '4xl': '1936px', // Default 2xl
+        '5xl': '2136px', // Default 2xl
+        '6xl': '2336px', // Default 2xl
+			},
   		fontFamily: {
   			protestFont: [
   				'Protest Revolution',
@@ -59,6 +72,9 @@ export default {
   		}
   	}
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [
+		require('daisyui'),
+		require("tailwindcss-animate")
+	],
 }
 

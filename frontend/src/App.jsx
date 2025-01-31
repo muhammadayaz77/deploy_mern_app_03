@@ -1,9 +1,14 @@
-import { Button } from "@/components/ui/button"
+import Toast from './components/Toast'
+import Routes from './page/Routes'
+
+import 'react-toastify/dist/ReactToastify.css'
+import './config/global'
 
 export default function App() {
   return (
     <div>
-      <Button variant='outline'>Click me</Button>
+      <Routes></Routes>
+      <Toast />
     </div>
   )
 }
