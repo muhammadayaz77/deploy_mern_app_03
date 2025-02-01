@@ -1,14 +1,18 @@
 /** @type {import('tailwindcss').Config} */
 export default {
     darkMode: ["class"],
-    content: ["./index.html", "./src/**/*.{ts,tsx,js,jsx}"],
+    content: [
+			"./index.html", "./src/**/*.{ts,tsx,js,jsx}",
+			require("flowbite-react/tailwind").content(),
+		
+		],
   theme: {
   	extend: {
 			screens : {
 				'xs': '480px',  // Extra small screens (Custom)
         'sm': '640px',  // Default small
         'md': '768px',  // Default medium
-        'custom': '900px', // Another custom breakpoint
+        'custom': '931px', // Another custom breakpoint
         'lg': '1024px', // Default large
         'xl': '1280px', // Default extra large
         '2xl': '1536px', // Default 2xl
@@ -74,7 +78,8 @@ export default {
   },
   plugins: [
 		require('daisyui'),
-		require("tailwindcss-animate")
+		require("tailwindcss-animate"),
+		require("flowbite-react/tailwind").plugin(),
 	],
 }
 

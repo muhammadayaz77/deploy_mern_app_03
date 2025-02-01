@@ -3,17 +3,20 @@ import React, { useState } from 'react'
 import { BiLogoFacebook } from "react-icons/bi";
 import { FaGoogle } from "react-icons/fa6";
 import { GrLinkedinOption } from "react-icons/gr";
-import LoginInput from '@/components/Auth/LoginInput';
+import LoginInput from '@/components/auth/LoginInput';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { USER_END_POINT } from '@/utils/constants';
 import { useDispatch } from 'react-redux';
 import { setUser } from '@/redux/authSlice';
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 const Login = () => {
   let [input,setInput] = useState({
     email : '',
     password : '',
+    role : '',
   })
   let [loading,setLoading] = useState(false);
   let navigate = useNavigate();
@@ -25,12 +28,19 @@ const Login = () => {
     })
     console.log(input)
   }
+  const radioHandler = (value) => {
+    setInput({
+      ...input,
+      role : value
+    });
+    console.log(input)
+  }
   const submitHandler = async(e) => {
     e.preventDefault();
     setLoading(true)
     if(!input.email || !input.password)
       {
-      window.toastify('Required all fields','warning')
+      window.toastify('Required all fields','error')
       }
       else
       {
@@ -72,6 +82,20 @@ const Login = () => {
                 <div>
                   <LoginInput changeHandler={changeHandler} />
                 </div>
+                   <div>
+                              <RadioGroup value={input.role} onValueChange={(val) => radioHandler(val)}>
+                               <div className="flex gap-5 ml-3">
+                               <div className="flex items-center space-x-2 cursor-pointer">
+                                  <RadioGroupItem value="student" id="option-one" />
+                                  <Label htmlFor="option-one">Student</Label>
+                                </div>
+                                <div className="flex items-center space-x-2 cursor-pointer">
+                                  <RadioGroupItem value="teacher" id="option-two" />
+                                  <Label htmlFor="option-two">Teacher</Label>
+                                </div>
+                               </div>
+                              </RadioGroup>
+                            </div>
                 <div className='flex justify-center'>
             <Button className='px-10 py-5 rounded-full border text-white bg-cyan mt-2'>
                {

@@ -38,7 +38,7 @@ export const register = async(req,res) => {
 
 export const login = async(req,res) => {
   try {
-    let {email,password} = req.body;
+    let {email,password,role} = req.body;
 
     let user = await userModel.findOne({email});
     if(!user)
@@ -56,6 +56,12 @@ export const login = async(req,res) => {
       message : 'Invalid Credentials!!!',
       success : false
       })
+    }
+    if(user.role !== role){
+      return res.status(400).json({
+        message : 'Role Not Match!!!',
+        success : false
+        })
     }
 
     let token = jwt.sign({
