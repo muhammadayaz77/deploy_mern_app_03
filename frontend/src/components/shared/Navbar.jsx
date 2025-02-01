@@ -59,10 +59,11 @@ function Navbar() {
           </PopoverContent>
         </Popover>
         : 
-        <Link to='/auth/login' className="flex flex-col items-center justify-center mr-5 cursor-pointer">
-
-         <CgProfile className="text-2xl" />
+        <Link to='/auth/login' className="mr-5 cursor-pointer">
+        <div className="flex sm:gap-0 gap-2 sm:flex-col items-center justify-center">
+         <CgProfile className="sm:text-2x text-xl" />
          <p className="text-ps">Sign in</p>
+        </div>
   
         </Link>        
         }

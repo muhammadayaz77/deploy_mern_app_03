@@ -7,7 +7,7 @@ const Home = () => {
   return (
     <div>
       <Navbar />
-      <div className="text-h1">
+      <div className="text-h1 max-w-screen-xl mx-auto">
         {
           user?.fullname
         }
