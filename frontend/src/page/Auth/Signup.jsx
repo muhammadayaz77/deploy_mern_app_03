@@ -6,7 +6,7 @@ import { GrLinkedinOption } from "react-icons/gr";
 import SignupInput from "@/components/auth/SignupInput";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { USER_END_POINT } from "@/utils/constants";
+import { USER_API_END_POINT } from "@/utils/constants";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
@@ -43,7 +43,7 @@ const Signup = () => {
     }
      else {
       await axios
-        .post(`${USER_END_POINT}/register`, input)
+        .post(`${USER_API_END_POINT}/register`, input)
         .then((res) => {
           navigate("/auth/login");
           window.toastify(res.data.message, "success");
@@ -56,8 +56,8 @@ const Signup = () => {
     setLoading(false);
   };
   return (
-    <div className="h-[100vh] w-full flex justify-center items-center bg-gray-50">
-      <div className="border h-[80vh] w-full custom:w-[90%] custom:mx-0 md:mx-24 xs:mx-10 mx-2 lg:w-[80%] xl:max-w-[70vw] xl:max-h-[70vh] 2xl:w-fit 2xl:h-fit grid grid-cols-12 rounded-2xl overflow-hidden bg-white">
+    <div className="min-h-[100vh] w-full flex justify-center items-center bg-gray-50">
+      <div className="border min-h-[80vh] w-full custom:w-[90%] custom:mx-0 md:mx-24 xs:mx-10 mx-2 lg:w-[80%] xl:max-w-[70vw] xl:max-h-[70vh] 2xl:w-fit 2xl:h-fit grid grid-cols-12 rounded-2xl overflow-hidden bg-white">
         <div className="custom:col-span-5 col-span-12 bg-cyan flex justify-center items-center 2xl:p-3">
           <div className="w-fit text-white">
             <h2 className="text-h2">Wellcome Back!</h2>
@@ -108,7 +108,7 @@ const Signup = () => {
                </div>
               </RadioGroup>
             </div>
-            <div className="flex justify-center">
+            <div className="ml-0 sm:ml-3">
               <Button className="px-10 py-5 rounded-full border text-white bg-cyan mt-2">
                 {!loading ? (
                   <span>SIGN UP</span>

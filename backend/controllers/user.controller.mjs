@@ -79,16 +79,46 @@ export const login = async(req,res) => {
   .cookie("token", token, {
     maxAge: 1 * 24 * 60 * 60 * 1000,
     httpOnly: true,
-    sameSite: "strict",
-    secure : false
+    sameSite: "none",
+    secure : "production"
   })
   .json({
     message: `Welcom back ${user.fullname}`,
     user,
     success: true,
   });
-
     
+  } catch (error) {
+    return res.status(404).json({
+      message : error.message,
+      success : false
+    })
+  }
+}
+
+export const logout = async(req,res) => {
+  try {
+    return res.status(200).cookie("token", "", { maxAge: 0 }).json({
+      message: "Logged out successfully",
+      success: true,
+    });
+  } catch (error) {
+    return res.status(404).cookie("token", "", { maxAge: 0 }).json({
+      message: error.message,
+      success: false,
+    });
+  }
+}
+
+export const updateProfile = async(req,res) => {
+  try {
+    let userId = req.userId;
+    let user = await userModel.findByIdAndUpdate(userId,req.body,{new:true});
+    return res.status(200).json({
+      user,
+      message : 'Profile Updated successfully!!!',
+      success : true
+    })
   } catch (error) {
     return res.status(404).json({
       message : error.message,

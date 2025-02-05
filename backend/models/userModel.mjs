@@ -23,6 +23,12 @@ let userSchema = mongoose.Schema({
     type : String,
     enum : ['student','teacher','admin'],
     require : true
+  },
+  aboutMe : {
+    type : String,
+  },
+  profilePic : {
+    type : String,
   }
 })
 

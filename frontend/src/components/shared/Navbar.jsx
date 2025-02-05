@@ -10,7 +10,10 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import axios from "axios";
+import { USER_API_END_POINT } from "@/utils/constants";
+import { setUser } from "@/redux/authSlice";
 
 
 
@@ -18,7 +21,18 @@ import { useSelector } from "react-redux";
 function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
 
-  const {user} = useSelector(store => store.auth)
+  const {user} = useSelector(store => store.auth);
+  const dispatch = useDispatch()
+  let handleLogout = async() => {
+    await axios.get(`${USER_API_END_POINT}/logout`)
+    .then(res => {
+      window.toastify(res.data.message,'success');
+      dispatch(setUser(null))
+    })
+    .catch(err => {
+      window.toastify(err.response.data.message,'error')
+    })
+  }
 
   return (
     <nav className="bg-white shadow-md dark:bg-gray-900 custom:h-16">
@@ -45,21 +59,25 @@ function Navbar() {
           <PopoverContent className='bg-white w-50 mx-5'>
             <div>
               <div className="">
-                <div className="text-ps text-black">Name</div>
-                <div className="text-ps text-gray-600">name@gmail.com</div>
+                <div className="text-ps text-black">{user.fullname}</div>
+                <div className="text-ps text-gray-600">{user.email}</div>
               </div>
               <hr className="my-2" />
               <div>
               <div className="text-ps text-gray-600 cursor-pointer p-1 hover:bg-gray-100 transition-all hover:rounded-lg">Dashboard</div>
+              <Link to='/profile'>
               <div className="text-ps text-gray-600 p-1 hover:bg-gray-100 cursor-pointer transition-all hover:rounded-lg">Profile</div>
+              </Link>
               <div className="text-ps text-gray-600 p-1 hover:bg-gray-100 cursor-pointer transition-all hover:rounded-lg">Setting</div>
-              <div className="text-ps text-gray-600 p-1 hover:bg-gray-100 cursor-pointer transition-all hover:rounded-lg">Sign out</div>
+              <div
+              onClick={handleLogout}
+              className="text-ps text-gray-600 p-1 hover:bg-gray-100 cursor-pointer transition-all hover:rounded-lg">Sign out</div>
               </div>
             </div>
           </PopoverContent>
         </Popover>
         : 
-        <Link to='/auth/login' className="mr-5 cursor-pointer">
+        <Link to='/auth/login' className="mr-3 cursor-pointer">
         <div className="flex sm:gap-0 gap-2 sm:flex-col items-center justify-center">
          <CgProfile className="sm:text-2x text-xl" />
          <p className="text-ps">Sign in</p>

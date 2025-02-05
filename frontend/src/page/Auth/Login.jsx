@@ -6,7 +6,7 @@ import { GrLinkedinOption } from "react-icons/gr";
 import LoginInput from '@/components/auth/LoginInput';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { USER_END_POINT } from '@/utils/constants';
+import { USER_API_END_POINT } from '@/utils/constants';
 import { useDispatch } from 'react-redux';
 import { setUser } from '@/redux/authSlice';
 import { Label } from "@/components/ui/label";
@@ -44,9 +44,15 @@ const Login = () => {
       }
       else
       {
-        await axios.post(`${USER_END_POINT}/login`,input)
+        await axios.post(`${USER_API_END_POINT}/login`,input,{
+          headers : {
+            'Content-Type' : 'application/json'
+          },
+          withCredentials : true
+        })
         .then(res => {
           navigate("/");
+          console.log(res)
       window.toastify(res.data.message,'success');
       dispatch(setUser(res.data.user))
         })
@@ -63,7 +69,7 @@ const Login = () => {
         <div className='custom:col-span-7 col-span-12 flex justify-center flex-col 2xl:p-3  order-2 custom:order-1'> 
             <form 
             onSubmit={submitHandler}
-            className='sm:w-[80%] p-7'>
+            className='sm:w-[80%] p-0 sm:p-7'>
                 <div className=''>
                   <h2 className='text-h2 text-center gradient-text'>Sign in</h2>
                   <div className='text-lg flex justify-center gap-2 ms:my-2'>
@@ -96,7 +102,7 @@ const Login = () => {
                                </div>
                               </RadioGroup>
                             </div>
-                <div className='flex justify-center'>
+                <div className='ml-0 sm:ml-3'>
             <Button className='px-10 py-5 rounded-full border text-white bg-cyan mt-2'>
                {
                               !loading ? <span>SIGN IN</span> :         
