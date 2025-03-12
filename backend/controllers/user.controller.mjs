@@ -1,35 +1,57 @@
-import userModel from "../models/userModel.mjs";
+import userModel from '../models/userModel.mjs';
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
+import { sendVerficationCode } from '../config/Email.mjs';
 
 
-export const register = async(req,res) => {
+export const userRegistration = async(req,res) => {
   try {
 
-    let {fullname,email,password,role} = req.body;
+    let {name,email,password,password_confirmation} = req.body;
 
-    let userExist = await userModel.findOne({email});
-    if(userExist)
+    if(!name || !email || !password || !password_confirmation)
+    {
+      return res.status(400).json({
+        message : "All fields are required",
+        success : false
+      })
+    }
+    if(password !== password_confirmation)
+    {
+      return res.status(400).json({
+        message : "Password do not match",
+        success : false
+      })
+    }
+
+    let existingUser = await userModel.findOne({email});
+    if(existingUser)
     {
       return res.status(400).json({
         message : "User Already registered",
         success : false
       })
     }
-    let hashedPassword = await bcrypt.hash(password,10);
-    let user = await userModel.create({
-      fullname,
+    const salt = await bcrypt.genSalt(Number(process.env.SALT));
+    let hashedPassword = await bcrypt.hash(password,salt);
+   
+    let newUser = await userModel.create({
+      name,
       email,
-      password : hashedPassword,
-      role,
+      password : hashedPassword
     })
+    sendVerficationCode(req,newUser);
     return res.status(200).json({
       message : "User Created Successfully!!!",
-      success : true
+      success : true,
+      user : {
+        id : newUser._id,
+        email : newUser.email,
+      }
     })
     
   } catch (error) {
-    return res.status(404).json({
+    return res.status(500).json({
       message : error.message,
       success : false
     })

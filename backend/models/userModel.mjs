@@ -2,36 +2,34 @@ import mongoose from "mongoose";
 
 
 let userSchema = mongoose.Schema({
-  fullname : {
+  name : {
     type:String,
-    require:true
+    require:true,
+    trim : true
   },
   email : {
     type:String,
     unique:true,
-    require:true
+    require:true,
+    lowercase:true,
+    trim:true
   },
   password : {
     type:String,
-    require:true
+    require:true,
+    trim:true
   },
-  fullname : {
-    type:String,
-    require:true
+  is_verified : {
+    type:Boolean,
+    default:false
   },
-  role : {
+  roles : {
     type : String,
-    enum : ['student','teacher','admin'],
-    require : true
-  },
-  aboutMe : {
-    type : String,
-  },
-  profilePic : {
-    type : String,
+    enum : ['user','admin'],
+    default : "user"
   }
 })
 
-const userModel = mongoose.model('User',userSchema)
+const UserModel = mongoose.model('user',userSchema)
 
-export default userModel;
+export default UserModel;
