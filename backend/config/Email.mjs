@@ -1,4 +1,4 @@
-import EmailVerificationModel from "../models/EmailVerificatin.mjs";
+import EmailVerificationModel from "../models/EmailVerification.mjs";
 import { transporter } from "./Email.config.mjs";
 import { Verification_Email_Template, Welcome_Email_Template } from "./EmailTemplate.mjs";
 
