@@ -168,38 +168,45 @@ export const login = async (req, res) => {
       });
     }
 
-    // Generate Tokens
-    const accessToken = jwt.sign(
-      { id: user._id, email: user.email },
-      process.env.ACCESS_TOKEN_SECRET,
-      { expiresIn: '10s' }
-    );
+    // Define Expiry Times
+const ACCESS_TOKEN_EXPIRY = 24 * 60 * 60 * 1000; // 1 day in milliseconds
+const REFRESH_TOKEN_EXPIRY = 7 * 24 * 60 * 60 * 1000; // 7 days in milliseconds
 
-    const refreshToken = jwt.sign(
-      { id: user._id, email: user.email },
-      process.env.REFRESH_TOKEN_SECRET,
-      { expiresIn: '7d' }
-    );
+// Generate Tokens
+const accessToken = jwt.sign(
+  { id: user._id, email: user.email },
+  process.env.ACCESS_TOKEN_SECRET,
+  { expiresIn: '1d' }
+);
 
-    // Set Cookies
-    res.cookie('accessToken', accessToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'Strict'
-    });
+const refreshToken = jwt.sign(
+  { id: user._id, email: user.email },
+  process.env.REFRESH_TOKEN_SECRET,
+  { expiresIn: '7d' }
+);
 
-    res.cookie('refreshToken', refreshToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'Strict'
-    });
+// Set Cookies
+res.cookie('accessToken', accessToken, {
+  httpOnly: true,
+  secure: process.env.NODE_ENV === 'production',
+  sameSite: 'Strict',
+  maxAge: ACCESS_TOKEN_EXPIRY
+});
 
-       // Store Refresh Token in Database
-       await RefreshToken.create({
-        token: refreshToken,
-        userId: user._id,
-        expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) // 7 days expiry
-      }); 
+res.cookie('refreshToken', refreshToken, {
+  httpOnly: true,
+  secure: process.env.NODE_ENV === 'production',
+  sameSite: 'Strict',
+  maxAge: REFRESH_TOKEN_EXPIRY
+});
+
+// Store Refresh Token in Database
+await RefreshToken.create({
+  token: refreshToken,
+  userId: user._id,
+  expiresAt: new Date(Date.now() + REFRESH_TOKEN_EXPIRY) // 7 days expiry
+});
+
 
     // Send Success Response with Tokens
     return res.status(200).json({

@@ -1,32 +1,19 @@
+import jwt from 'jsonwebtoken';
 
-import jwt from 'jsonwebtoken'
+ const isAuthenticated = (req, res, next) => {
+  const token = req.cookies.accessToken;
+  if (!token) return res.status(401).json({ message: 'Access denied' });
 
-
-// Middleware to authenticate the user
-const isAuthenticated = async(req, res, next) => {
-  try {
-    // Get token from cookies
-    const token = req.cookies.token;
-    // Check if the token exists
-    if (!token) {
-      return res.status(401).json({ message: 'No token provided, authentication failed' });
-    }
-    
-    // Verify the token
-    const decoded = jwt.verify(token, process.env.SECRET);
-    if(!decoded)
-      return res.status(401).json({
-    message : "Auth Failed",
-    success : false
-  })
-    // Attach user information to the request object
-    req.userId = decoded.userId;
-    req.role = decoded.role
-    // Proceed to the next middleware/route
+  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+    if (err) return res.status(403).json({
+       message: 'Invalid or expired token',
+       success : false
+     });
+     console.log('user : ',user.id)
+     console.log('user : ',user.email)
+    req.user = user;
     next();
-  } catch (err) {
-    return res.status(403).json({ message: 'Invalid or expired token' });
-  }
+  });
 };
 
-export default isAuthenticated
+export default isAuthenticated;

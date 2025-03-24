@@ -12,5 +12,9 @@ router.post('/login',login)
 router.get('/logout',logout)
 router.post('/update/profile',isAuthenticated,updateProfile)
 
+router.get('/protected', isAuthenticated, (req, res) => {
+  res.json({ message: 'Protected route accessed!', user: req.user });
+});
+
 
 export default router;
